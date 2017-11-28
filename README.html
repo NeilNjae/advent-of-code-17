@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>Advent of Code 2017</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="modest.css" type="text/css" />
+</head>
+<body>
+<div id="header">
+<h1 class="title">Advent of Code 2017</h1>
+</div>
+<p>Code to solve the <a href="http://adventofcode.com/2017/">Advent of Code</a> puzzles. This year, I'm using the puzzles to develop my skills in <a href="https://wiki.haskell.org/Haskell">Haskell</a>.</p>
+<p><a href="http://learnyouahaskell.com/chapters">Learn you a Haskell</a>, <a href="https://www.haskell.org/tutorial/index.html">Introduction to Haskell 98</a>, and <a href="https://hackage.haskell.org/">Hackage</a> are good resources.</p>
+<h1 id="toolchain">Toolchain</h1>
+<p>I'm using the basic Haskell Platform installation, togeher with <code>Stack</code> to manage the packages and dependencies (install with</p>
+<pre><code>$ sudo aptitude install haskell-platform haskell-stack</code></pre>
+<p>).</p>
+<h2 id="creating-the-repository-and-project">Creating the repository and project</h2>
+<p>Create the repository as normal: create the project in Gitolite, clone it, and insert the <code>.gitignore</code> and <code>README.md</code> files.</p>
+<p>Within the project directory, there will be one package for each day. This will save time waiting for <code>stack</code> to check every executable before compiling what's changed. Each package needs a separate directory tree and a separate <code>.cabal</code> file.</p>
+<h2 id="creating-the-first-package">Creating the first package</h2>
+<p>Then create the basic <code>stack</code> project with it. This will create a new directory. Note that this new directory name can't have a hyphen-delimited word that's just digits, so the initial project will have to be <code>adventofcode1701</code></p>
+<pre><code>stack new adventofcode1701 simple</code></pre>
+<p>This project will be demoted to being a package, but one that will hold the overall project.</p>
+<p>Then create the top-level <code>stack.yaml</code> file to hold the overall project information.</p>
+<pre><code>stack init</code></pre>
+<p>Modify this top-level <code>stack.yaml</code> file as needed, such as adding the <code>ghc-options</code> stanza. You can then delete <code>adventofcode1701/stack.yaml</code>.</p>
+<h2 id="creating-subsequent-packages">Creating subsequent packages</h2>
+<p>Each package needs a separate directory tree and a separate <code>.cabal</code> file.</p>
+<p>To work on a project, <code>cd</code> into that project's directory.</p>
+<p>Compile with</p>
+<pre><code>stack build</code></pre>
+<p>or</p>
+<pre><code>stack build adventofcode1701</code></pre>
+<p>Run with</p>
+<pre><code>stack exec advent01</code></pre>
+<p>Run interactively with</p>
+<pre><code>stack ghci adventofcode1701:exe:advent01</code></pre>
+<p>To profile, use</p>
+<pre><code>stack build --executable-profiling --library-profiling --ghc-options=&quot;-fprof-auto -rtsopts&quot; adventofcode1601</code></pre>
+<p>then run with</p>
+<pre><code>stack exec -- advent01 +RTS -p -hy</code></pre>
+<h1 id="readme">Readme</h1>
+<p>Build this readme file wth</p>
+<pre><code>pandoc -s README.md &gt; README.html</code></pre>
+<p>(Using the <a href="https://github.com/markdowncss/modest">Modest style</a>.)</p>
+</body>
+</html>
