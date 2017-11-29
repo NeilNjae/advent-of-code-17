@@ -7,6 +7,8 @@ Code to solve the [Advent of Code](http://adventofcode.com/2017/) puzzles. This 
 
 [Learn you a Haskell](http://learnyouahaskell.com/chapters), [Introduction to Haskell 98](https://www.haskell.org/tutorial/index.html), and [Hackage](https://hackage.haskell.org/) are good resources.
 
+The [Stack documentation](https://docs.haskellstack.org/en/stable/README/) and [How I Start: Haskell](http://howistart.org/posts/haskell/1/) are good sources of using the tools. 
+
 # Toolchain
 
 I'm using the basic Haskell Platform installation, togeher with `Stack` to manage the packages and dependencies (install with
