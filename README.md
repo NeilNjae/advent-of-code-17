@@ -71,6 +71,16 @@ then run with
 stack exec -- advent01 +RTS -p -hy
 ```
 
+# IHaskell
+
+Install following the [IHaskell instructions](https://github.com/gibiansky/IHaskell).
+
+To run, change into the package's directory (after modifying the `.cabal` file) and run it with
+
+```
+stack exec jupyter -- notebook
+```
+
 # Readme
 
 Build this readme file wth
