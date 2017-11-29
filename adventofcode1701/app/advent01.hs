@@ -20,7 +20,7 @@ part1 instructions = do
 
 part2 :: [Int] -> IO ()
 part2 instructions = do
-        print $ length $ takeWhile (> -1) $ scanl (+) 0 instructions
+        print $ length $ takeWhile (>= 0) $ scanl (+) 0 instructions
 
 
 
