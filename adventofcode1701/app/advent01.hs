@@ -2,7 +2,7 @@
 
 module Main(main) where
 
-import Data.List (tails)
+import Data.Char (digitToInt)
 
 main :: IO ()
 main = do 
@@ -10,22 +10,20 @@ main = do
         print $ part1 digits
         print $ part2 digits
 
-part1 :: String -> Integer  
-part1 = sum_valid_pairs . part1_extract
+part1 :: String -> Int  
+part1 = solve 1
 
-part2 :: String -> Integer  
-part2 = sum_valid_pairs . part2_extract
+part2 :: String -> Int  
+part2 digits = solve (length digits `div` 2) digits
 
-part1_extract :: String -> [String]  
-part1_extract digits =  map (take 2) $ tails (digits ++ [head digits])
+-- Verbose version
+-- solve n digits = sum $ map (digitToInt . fst) 
+--                      $ filter (uncurry (==)) 
+--                      $ zip digits 
+--                      $ drop n 
+--                      $ cycle digits
 
-part2_extract :: String -> [String]
-part2_extract digits = map (\ds -> (take 1 ds) ++ (take 1 $ drop offset ds)) 
-        $ take (length digits) 
-        $ tails (digits ++ digits)
-    where offset = length digits `div` 2
-
-sum_valid_pairs :: [String] -> Integer
-sum_valid_pairs possibles = sum $ map (read . take 1) 
-                   $ filter (\(x:y:_) -> x == y) 
-                   $ filter (\p -> length p == 2) possibles
+solve :: Int -> String -> Int
+solve n digits = sum $ zipWith (\a b -> if a == b then digitToInt a else 0) digits 
+                     $ drop n 
+                     $ cycle digits
