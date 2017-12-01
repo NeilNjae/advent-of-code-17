@@ -2,41 +2,30 @@
 
 module Main(main) where
 
-import Text.Parsec hiding (State)
--- import Text.ParserCombinators.Parsec.Number
-
-
+import Data.List (tails)
 
 main :: IO ()
 main = do 
-        text <- readFile "data/advent01.txt"
-        let instructions = successfulParse $ parseIline text
-        part1 instructions
-        part2 instructions
+        digits <- readFile "data/advent01.txt"
+        print $ part1 digits
+        print $ part2 digits
 
-part1 :: [Int] -> IO ()
-part1 instructions = do
-        print $ sum instructions
+part1 :: String -> Integer  
+part1 = sum_valid_pairs . part1_extract
 
-part2 :: [Int] -> IO ()
-part2 instructions = do
-        print $ length $ takeWhile (>= 0) $ scanl (+) 0 instructions
+part2 :: String -> Integer  
+part2 = sum_valid_pairs . part2_extract
 
+part1_extract :: String -> [String]  
+part1_extract digits =  map (take 2) $ tails (digits ++ [head digits])
 
+part2_extract :: String -> [String]
+part2_extract digits = map (\ds -> (take 1 ds) ++ (take 1 $ drop offset ds)) 
+        $ take (length digits) 
+        $ tails (digits ++ digits)
+    where offset = length digits `div` 2
 
--- instructionFile = instructionLine `endBy` newline 
-instructionLine = many (up <|> down)
-
-
-up   = char '(' *> pure 1
-down = char ')' *> pure -1
-
--- parseIfile :: String -> Either ParseError [[Int]]
--- parseIfile input = parse instructionFile "(unknown)" input
-
-parseIline :: String -> Either ParseError [Int]
-parseIline input = parse instructionLine "(unknown)" input
-
-successfulParse :: Either ParseError [a] -> [a]
-successfulParse (Left _) = []
-successfulParse (Right a) = a
+sum_valid_pairs :: [String] -> Integer
+sum_valid_pairs possibles = sum $ map (read . take 1) 
+                   $ filter (\(x:y:_) -> x == y) 
+                   $ filter (\p -> length p == 2) possibles
