@@ -1,5 +1,5 @@
-name:                adventofcode17
-version:             0.1.0.0
+name:                advent-of-code
+version:             17.1.0.0
 -- synopsis:
 -- description:
 homepage:            https://github.com/neilnjae/advent-of-code-17#readme
@@ -21,6 +21,13 @@ library
 executable advent01
   hs-source-dirs:      src/advent01
   main-is:             advent01.hs
+  default-language:    Haskell2010
+  build-depends:       base >= 4.7 && < 5
+                     , parsec
+
+executable advent01verbose
+  hs-source-dirs:      src/advent01
+  main-is:             advent01verbose.hs
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5
                      , parsec
