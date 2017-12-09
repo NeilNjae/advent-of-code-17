@@ -79,3 +79,13 @@ executable advent07
                      , parsec
                      , parsec-numbers
                      
+executable advent08
+  hs-source-dirs:      src/advent08
+  main-is:             advent08.hs
+  default-language:    Haskell2010
+  build-depends:       base >= 4.7 && < 5
+                     , containers
+                     , parsec
+                     , parsec-numbers
+                     , containers
+                     
