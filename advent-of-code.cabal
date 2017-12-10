@@ -94,4 +94,10 @@ executable advent09
   main-is:             advent09.hs
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5
-                                         
+
+executable advent10
+  hs-source-dirs:      src/advent10
+  main-is:             advent10.hs
+  default-language:    Haskell2010
+  build-depends:       base >= 4.7 && < 5
+                     , split
