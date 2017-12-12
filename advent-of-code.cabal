@@ -108,3 +108,13 @@ executable advent11
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5
                      , split
+
+executable advent12
+  hs-source-dirs:      src/advent12
+  main-is:             advent12.hs
+  default-language:    Haskell2010
+  build-depends:       base >= 4.7 && < 5
+                     , containers
+                     , text
+                     , megaparsec
+
