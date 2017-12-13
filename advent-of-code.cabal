@@ -118,3 +118,11 @@ executable advent12
                      , text
                      , megaparsec
 
+executable advent13
+  hs-source-dirs:      src/advent13
+  main-is:             advent13.hs
+  default-language:    Haskell2010
+  build-depends:       base >= 4.7 && < 5
+                     , text
+                     , megaparsec
+
