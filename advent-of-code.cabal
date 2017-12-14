@@ -135,7 +135,6 @@ executable advent14
                      , containers
                      , parallel
 
-
 executable advent14serial
   hs-source-dirs:      src/advent14
   main-is:             advent14serial.hs
@@ -143,3 +142,4 @@ executable advent14serial
   build-depends:       base >= 4.7 && < 5
                      , split
                      , containers
+

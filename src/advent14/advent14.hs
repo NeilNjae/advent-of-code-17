@@ -2,10 +2,13 @@ import Data.List.Split (chunksOf)
 import Data.Char (ord)
 import Text.Printf (printf)
 import Data.Bits (xor)
-import qualified Data.Map.Strict as M
+-- import qualified Data.Map.Strict as M
+import qualified Data.Set as S
 import qualified Data.Graph as G
 import Control.Parallel.Strategies (parMap, rpar)
-type CellMap = M.Map (Int, Int) Bool
+
+
+type CellSet = S.Set (Int, Int)
 
 puzzleKey = "xlqgujun"
 
@@ -35,16 +38,16 @@ numKey :: (Int, Int) -> Int
 numKey (r, c) = 128 * r + c
 
 
-presentCells :: [String] -> CellMap
-presentCells bhs = M.fromList [((r, c), True) | r <- [0..127], c <- [0..127], (bhs!!r)!!c == '1']
+presentCells :: [String] -> CellSet
+presentCells bhs = S.fromList [(r, c) | r <- [0..127], c <- [0..127], (bhs!!r)!!c == '1']
 
-adjacentCells :: CellMap -> (Int, Int) -> [(Int, Int)]
-adjacentCells cells (r, c) = filter (\k -> M.member k cells) possibles
+adjacentCells :: CellSet -> (Int, Int) -> [(Int, Int)]
+adjacentCells cells (r, c) = filter (\k -> S.member k cells) possibles
   where possibles = [(r, c - 1), (r, c + 1), (r - 1, c), (r + 1, c)]
 
 
-cellEdges :: CellMap -> [G.SCC (Int, Int)]
-cellEdges cells = G.stronglyConnComp [(k, numKey k, map numKey $ adjacentCells cells k) | k <- M.keys cells]
+cellEdges :: CellSet -> [G.SCC (Int, Int)]
+cellEdges cells = G.stronglyConnComp [(k, numKey k, map numKey $ adjacentCells cells k) | k <- S.elems cells]
 
 rowSpecs :: String -> [String]
 rowSpecs key = map (((key ++ "-") ++) . show) ([0..127] :: [Integer])
