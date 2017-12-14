@@ -4,7 +4,7 @@ import Text.Printf (printf)
 import Data.Bits (xor)
 import qualified Data.Map.Strict as M
 import qualified Data.Graph as G
-import Control.Parallel.Strategies (parMap, rpar)
+-- import Control.Parallel.Strategies (parMap, rpar)
 type CellMap = M.Map (Int, Int) Bool
 
 puzzleKey = "xlqgujun"
@@ -17,7 +17,7 @@ main = do
 
 part1 :: String -> Int
 part1 key = sum rowCounts
-    where rowCounts = parMap rpar countSetBits $ binHashes key
+    where rowCounts = map countSetBits $ binHashes key
 
 
 part2 :: String -> Int
@@ -25,7 +25,7 @@ part2 key = length $ cellEdges cells
     where cells = presentCells $ binHashes key
 
 binHashes :: String -> [String]
-binHashes key = parMap rpar binHash $ rowSpecs key
+binHashes key = map binHash $ rowSpecs key
 
 
 binHash :: String -> String
