@@ -2,20 +2,59 @@ import Data.List.Split (chunksOf)
 import Data.Char (ord)
 import Text.Printf (printf)
 import Data.Bits (xor)
+import qualified Data.Map.Strict as M
+import Data.Map.Strict ((!))
+import qualified Data.Graph as G
+
+type CellMap = M.Map (Int, Int) Bool
 
 puzzleKey = "xlqgujun"
 
+main :: IO ()
+main = do
+  print $ part1 puzzleKey
+
+-- part1 :: String -> Int
+-- part1 key = sum rowCounts
+--     where hashes = map knotHash $ rowSpecs key
+--           rowCounts = map (countSetBits . binify) hashes
 
 part1 :: String -> Int
 part1 key = sum rowCounts
-    where hashes = map knotHash $ rowSpecs key
-          rowCounts = map (countSetBits . binify) hashes
+    where binHashes = map binHash $ rowSpecs key
+          rowCounts = map countSetBits binHashes
+
+
+-- part2 :: String -> Int
+part2 key = cells
+    where binHashes = map binHash $ rowSpecs key
+          cells = presentCells binHashes
+
+binHash :: String -> String
+binHash = binify . knotHash
+
+numKey :: (Int, Int) -> Int
+numKey (r, c) = 128 * r + c
+
+
+presentCells :: [String] -> CellMap
+presentCells binHashes = M.fromList [((r, c), True) | r <- [0..127], c <- [0..127], (binHashes!!r)!!c == '1']
+
+adjacentCells :: CellMap -> (Int, Int) -> [(Int, Int)]
+adjacentCells cells (r, c) = filter (\k -> M.member k cells) possibles
+  where possibles = [(r, c - 1), (r, c + 1), (r - 1, c), (r + 1, c)]
+        -- isPresent rc = length $ rc `member` cells
+
+
+cellEdges :: CellMap -> Int
+cellEdges cells = length $ G.stronglyConnComp [(k, numKey k, map numKey $ adjacentCells cells k) | k <- M.keys cells]
 
 rowSpecs :: String -> [String]
 rowSpecs key = map (((key ++ "-") ++) . show) [0..127]
 
 countSetBits :: String -> Int
 countSetBits = length . filter (== '1')
+
 
 
 knotHash :: String -> [Int]
