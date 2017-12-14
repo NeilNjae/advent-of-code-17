@@ -13,6 +13,7 @@ puzzleKey = "xlqgujun"
 main :: IO ()
 main = do
   print $ part1 puzzleKey
+  print $ part2 puzzleKey
 
 -- part1 :: String -> Int
 -- part1 key = sum rowCounts
@@ -26,7 +27,7 @@ part1 key = sum rowCounts
 
 
 -- part2 :: String -> Int
-part2 key = cells
+part2 key = length $ cellEdges cells
     where binHashes = map binHash $ rowSpecs key
           cells = presentCells binHashes
 
@@ -46,8 +47,8 @@ adjacentCells cells (r, c) = filter (\k -> M.member k cells) possibles
         -- isPresent rc = length $ rc `member` cells
 
 
-cellEdges :: CellMap -> Int
-cellEdges cells = length $ G.stronglyConnComp [(k, numKey k, map numKey $ adjacentCells cells k) | k <- M.keys cells]
+-- cellEdges :: CellMap -> Int
+cellEdges cells = G.stronglyConnComp [(k, numKey k, map numKey $ adjacentCells cells k) | k <- M.keys cells]
 
 rowSpecs :: String -> [String]
 rowSpecs key = map (((key ++ "-") ++) . show) [0..127]
