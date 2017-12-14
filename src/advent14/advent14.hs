@@ -3,7 +3,6 @@ import Data.Char (ord)
 import Text.Printf (printf)
 import Data.Bits (xor)
 import qualified Data.Map.Strict as M
-import Data.Map.Strict ((!))
 import qualified Data.Graph as G
 
 type CellMap = M.Map (Int, Int) Bool
@@ -15,10 +14,6 @@ main = do
   print $ part1 puzzleKey
   print $ part2 puzzleKey
 
--- part1 :: String -> Int
--- part1 key = sum rowCounts
---     where hashes = map knotHash $ rowSpecs key
---           rowCounts = map (countSetBits . binify) hashes
 
 part1 :: String -> Int
 part1 key = sum rowCounts
@@ -26,7 +21,7 @@ part1 key = sum rowCounts
           rowCounts = map countSetBits binHashes
 
 
--- part2 :: String -> Int
+part2 :: String -> Int
 part2 key = length $ cellEdges cells
     where binHashes = map binHash $ rowSpecs key
           cells = presentCells binHashes
@@ -44,14 +39,13 @@ presentCells binHashes = M.fromList [((r, c), True) | r <- [0..127], c <- [0..12
 adjacentCells :: CellMap -> (Int, Int) -> [(Int, Int)]
 adjacentCells cells (r, c) = filter (\k -> M.member k cells) possibles
   where possibles = [(r, c - 1), (r, c + 1), (r - 1, c), (r + 1, c)]
-        -- isPresent rc = length $ rc `member` cells
 
 
--- cellEdges :: CellMap -> Int
+cellEdges :: CellMap -> [G.SCC (Int, Int)]
 cellEdges cells = G.stronglyConnComp [(k, numKey k, map numKey $ adjacentCells cells k) | k <- M.keys cells]
 
 rowSpecs :: String -> [String]
-rowSpecs key = map (((key ++ "-") ++) . show) [0..127]
+rowSpecs key = map (((key ++ "-") ++) . show) ([0..127] :: [Integer])
 
 countSetBits :: String -> Int
 countSetBits = length . filter (== '1')
@@ -87,8 +81,8 @@ mkHashTerms :: String -> [Int]
 mkHashTerms text = take (length chunk * 64) $ cycle chunk
     where chunk = map ord text ++ [17, 31, 73, 47, 23]
 
-hexify :: [Int] -> String
-hexify = concatMap (printf "%02x")
+-- hexify :: [Int] -> String
+-- hexify = concatMap (printf "%02x")
 
 binify :: [Int] -> String
 binify = concatMap (printf "%08b")
