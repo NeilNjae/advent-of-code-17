@@ -13,8 +13,8 @@ part1 = length $ filter (uncurry (==)) $ take 40000000 $ zip streamA streamB
 
 
 part2 = length $ filter (uncurry (==)) $ take 5000000 $ zip fsA fsB
-    where fsA = filteredStream 3 streamA
-          fsB = filteredStream 7 streamB
+    where fsA = stream' 4 generatorA generatorAStart -- filteredStream 3 streamA
+          fsB = stream' 8 generatorB generatorBStart -- filteredStream 7 streamB
 
 
 generatorA = generator 2147483647 16807
@@ -32,5 +32,10 @@ toWord16 = fromIntegral
 stream :: (Int -> Int) -> Int -> [Word16]
 stream gen n0 = map toWord16 $ drop 1 $ iterate gen n0
 
-filteredStream :: Word16 -> [Word16] -> [Word16]
-filteredStream f = filter ((== 0) . ( .&. f))
+stream' :: Int -> (Int -> Int) -> Int -> [Word16]
+stream' f gen n0 = map toWord16 $ drop 1 $ filter ((== 0) . (`mod` f)) $ iterate gen n0
+
+
+-- filteredStream :: Word16 -> [Word16] -> [Word16]
+-- filteredStream f = filter ((== 0) . ( .&. f))
+
