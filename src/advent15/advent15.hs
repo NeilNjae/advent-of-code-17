@@ -33,7 +33,7 @@ stream :: (Int -> Int) -> Int -> [Word16]
 stream gen n0 = map toWord16 $ drop 1 $ iterate gen n0
 
 stream' :: Int -> (Int -> Int) -> Int -> [Word16]
-stream' f gen n0 = map toWord16 $ drop 1 $ filter ((== 0) . (`mod` f)) $ iterate gen n0
+stream' f gen n0 = map toWord16 $ filter ((== 0) . (`mod` f)) $ drop 1 $ iterate gen n0
 
 
 -- filteredStream :: Word16 -> [Word16] -> [Word16]
