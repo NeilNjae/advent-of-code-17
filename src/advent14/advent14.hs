@@ -2,11 +2,9 @@ import Data.List.Split (chunksOf)
 import Data.Char (ord)
 import Text.Printf (printf)
 import Data.Bits (xor)
--- import qualified Data.Map.Strict as M
 import qualified Data.Set as S
 import qualified Data.Graph as G
 import Control.Parallel.Strategies (parMap, rpar)
-
 
 type CellSet = S.Set (Int, Int)
 
