@@ -23,14 +23,14 @@ generatorB = generator 2147483647 48271
 streamA = stream generatorA generatorAStart
 streamB = stream generatorB generatorBStart
 
-generator :: Word64 -> Word64 -> Word64 -> Word64
+generator :: Int -> Int -> Int -> Int
 generator divisor factor n = n * factor `rem` divisor
 
-toWord16 :: Word64 -> Word16
+toWord16 :: Int -> Word16
 toWord16 = fromIntegral
 
-stream :: (Word64 -> Word64) -> Word64 -> [Word16]
+stream :: (Int -> Int) -> Int -> [Word16]
 stream gen n0 = map toWord16 $ drop 1 $ iterate gen n0
 
 filteredStream :: Word16 -> [Word16] -> [Word16]
-filteredStream f str = filter ((== 0) . ( .&. f)) str
+filteredStream f = filter ((== 0) . ( .&. f))
