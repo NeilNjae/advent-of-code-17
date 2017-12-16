@@ -154,3 +154,15 @@ executable advent15other
   main-is:             advent15other.hs
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5
+
+executable advent16
+  hs-source-dirs:      src/advent16
+  main-is:             advent16.hs
+  default-language:    Haskell2010
+  build-depends:       base >= 4.7 && < 5
+                     , containers
+                     , mtl
+                     , text
+                     , megaparsec
+                     , vector
+
