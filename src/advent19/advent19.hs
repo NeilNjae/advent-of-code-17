@@ -44,6 +44,7 @@ delta Down  = ( 1,  0)
 delta Left  = ( 0, -1)
 delta Right = ( 0,  1)
 
+isJunction :: Char -> Bool
 isJunction '+' = True
 isJunction  _  = False 
 
