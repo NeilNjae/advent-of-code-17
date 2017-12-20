@@ -109,12 +109,11 @@ integer       = lexeme L.integer
 signedInteger = L.signed sc integer
 
 symbol = L.symbol sc
-separator = symbol ", "
 comma = symbol ","
 
 particlesP = particleP `sepBy` space
-particleP = particlify <$> (symbol "p=" *> vecP <* separator)
-                       <*> (symbol "v=" *> vecP <* separator)
+particleP = particlify <$> (symbol "p=" *> vecP <* comma)
+                       <*> (symbol "v=" *> vecP <* comma)
                        <*> (symbol "a=" *> vecP)
     where particlify p v a = Particle { position = p
                                       , velocity = v
