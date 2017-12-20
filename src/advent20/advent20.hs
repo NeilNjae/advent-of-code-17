@@ -34,7 +34,7 @@ main = do
         text <- TIO.readFile "data/advent20.txt"
         let particles = successfulParse text
         print $ part1 particles
-        print $ part2 500 particles
+        print $ part2 50 particles
 
 
 part1 :: [Particle] -> Int
@@ -59,7 +59,9 @@ simulateC t particles = simulateC (t - 1) (map step particles')
 
 step :: Particle -> Particle
 step particle = particle {position = p', velocity = v'}
-    where pv' = V.zipWith3 updatePV (position particle) (velocity particle) (acceleration particle)
+    where pv' = V.zipWith3 updatePV (position particle) 
+                                    (velocity particle) 
+                                    (acceleration particle)
           (p', v') = V.unzip pv'
           updatePV p v a = (p + v + a, v + a)
 
@@ -67,12 +69,15 @@ step particle = particle {position = p', velocity = v'}
 -- Checks whether a particle could ever get closer to the origin than it is now.
 quiescent :: Particle -> Bool
 quiescent particle = and qDimensions
-    where qDimensions = V.zipWith3 sameSigns (position particle) (velocity particle) (acceleration particle)
+    where qDimensions = V.zipWith3 sameSigns (position particle) 
+                                             (velocity particle) 
+                                             (acceleration particle)
           sameSigns p v a = if a == 0 && v == 0
                             then True
                             else if a == 0
                                  then signum p == signum v
-                                 else signum p == signum v && signum v == signum a
+                                 else signum p == signum v 
+                                        && signum v == signum a
 
 
 withMinX particles = minX `elemIndices` absXs
@@ -85,8 +90,13 @@ pAbsX particle = V.foldl1' (+) $ V.map abs (position particle)
 
 removeColliders particles = particles'
     where positions = map position particles
-          duplicatePositions = S.fromList $ concat $ filter (\g -> length g > 1) $ group $ sort positions
-          particles' = filter (\p -> not (S.member (position p) duplicatePositions)) particles
+          duplicatePositions = S.fromList $ concat 
+                                          $ filter (\g -> length g > 1) 
+                                          $ group 
+                                          $ sort positions
+          particles' = filter (\p -> not (S.member (position p) 
+                                                   duplicatePositions)) 
+                              particles
 
 
 
@@ -106,10 +116,14 @@ particlesP = particleP `sepBy` space
 particleP = particlify <$> (symbol "p=" *> vecP <* separator)
                        <*> (symbol "v=" *> vecP <* separator)
                        <*> (symbol "a=" *> vecP)
-    where particlify p v a = Particle {position = p, velocity = v, acceleration = a}
+    where particlify p v a = Particle { position = p
+                                      , velocity = v
+                                      , acceleration = a
+                                      }
 
 
-vecP = V.fromList <$> between (symbol "<") (symbol ">") (signedInteger `sepBy` comma)
+vecP = V.fromList <$> between (symbol "<") (symbol ">") 
+                              (signedInteger `sepBy` comma)
 
 
 successfulParse :: Text -> [Particle]
