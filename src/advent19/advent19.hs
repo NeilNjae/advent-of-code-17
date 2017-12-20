@@ -8,11 +8,12 @@ import Data.List
 import Data.Char
 
 type Maze = [String]
+type Position = (Int, Int)
+
 
 data Direction = Up | Down | Left | Right deriving (Show, Eq)
 
-data Progress = Progress { row :: Int
-                         , column :: Int
+data Progress = Progress { position :: Position
                          , direction :: Direction
                          , letters :: String
                          , stepCount :: Int
@@ -32,11 +33,17 @@ main = do
 
 
 startProgress :: Maze -> Progress
-startProgress maze = Progress { row = 0, column = startCol
+startProgress maze = Progress { position = (0, startCol)
                               , direction = Down
                               , letters = "", stepCount = 0}
-    where topRow = maze!!0
-          startCol = head $ elemIndices '|' topRow  
+    where startCol = head $ elemIndices '|' (maze!!0)
+
+(!:) :: Maze -> Position -> Char
+(!:) m (r, c) = (m!!r)!!c
+
+(+:) :: Position -> Position -> Position
+(+:) (r, c) (dr, dc) = (r + dr, c + dc)
+
 
 delta :: Direction -> (Int, Int)
 delta Up    = (-1,  0)
@@ -49,10 +56,10 @@ isJunction '+' = True
 isJunction  _  = False 
 
 isFinished :: Maze -> Progress -> Bool
-isFinished maze progress = isSpace $ location maze (row progress) (column progress)
+isFinished maze progress = isSpace $ maze!:(position progress)
 
-location :: Maze -> Int -> Int -> Char
-location maze r c = (maze!!r)!!c
+-- location :: Maze -> Int -> Int -> Char
+-- location maze r c = (maze!!r)!!c
 
 
 navigate :: Maze -> Progress
@@ -67,15 +74,12 @@ navigate' maze progress =
 
 
 step :: Maze -> Progress -> Progress
-step maze progress = progress {row = r', column = c', direction = d', letters = l', stepCount = sc'}
-    where r = row progress
-          c = column progress
-          thisChar = location maze r c
+step maze progress = progress {position = p', direction = d', letters = l', stepCount = sc'}
+    where p = position progress
+          thisChar = maze!:p
           l' = if isAlpha thisChar then (letters progress) ++ [thisChar] else letters progress
           d' = if isJunction thisChar then newDirection maze progress else direction progress 
-          (dr, dc) = delta d'
-          r' = r + dr
-          c' = c + dc
+          p' = p +: delta d'
           sc' = stepCount progress + 1
 
 newDirection :: Maze -> Progress -> Direction
@@ -84,7 +88,6 @@ newDirection maze progress =
     then if isSpace leftChar then Right else Left
     else if isSpace upChar then Down else Up
     where d = direction progress
-          r = row progress
-          c = column progress
-          upChar = location maze (r - 1) c
-          leftChar = location maze r (c - 1)
+          p = position progress
+          upChar = maze!:(p +: (delta Up))
+          leftChar = maze!:(p +: (delta Left))
