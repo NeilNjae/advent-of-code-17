@@ -13,7 +13,6 @@ import qualified Text.Megaparsec.Lexer as L
 import Text.Megaparsec.Text (Parser)
 import qualified Control.Applicative as CA
 
--- import Data.Vector ((!), (//))
 import qualified Data.Vector as V
 
 import Data.List 
@@ -61,7 +60,7 @@ simulateC t particles = simulateC (t - 1) (map step particles')
 step :: Particle -> Particle
 step particle = particle {position = p', velocity = v'}
     where pv' = V.zipWith3 updatePV (position particle) (velocity particle) (acceleration particle)
-          !(p', v') = V.unzip pv'
+          (p', v') = V.unzip pv'
           updatePV p v a = (p + v + a, v + a)
 
 
@@ -69,11 +68,11 @@ step particle = particle {position = p', velocity = v'}
 quiescent :: Particle -> Bool
 quiescent particle = and qDimensions
     where qDimensions = V.zipWith3 sameSigns (position particle) (velocity particle) (acceleration particle)
-          sameSigns !p !v !a = if a == 0 && v == 0
-                               then True
-                               else if a == 0
-                                    then signum p == signum v
-                                    else signum p == signum v && signum v == signum a
+          sameSigns p v a = if a == 0 && v == 0
+                            then True
+                            else if a == 0
+                                 then signum p == signum v
+                                 else signum p == signum v && signum v == signum a
 
 
 withMinX particles = minX `elemIndices` absXs
@@ -82,7 +81,6 @@ withMinX particles = minX `elemIndices` absXs
 
 pAbsX :: Particle -> Integer
 pAbsX particle = V.foldl1' (+) $ V.map abs (position particle)  
-
 
 
 removeColliders particles = particles'
