@@ -19,6 +19,8 @@ import Data.Map.Strict ((!))
 
 import Data.List 
 
+import Control.Parallel.Strategies (parMap, rpar)
+
 
 type Grid = M.Map (Int, Int) Bool
 type ExplodedGrid = M.Map (Int, Int) Grid
@@ -92,7 +94,9 @@ nthApplication rules n = (!! n) $ iterate (applyOnce rules) initialGrid
 
 -- Apply one step of the expansion
 applyOnce :: [Rule] -> Grid -> Grid
-applyOnce rules g = contractExploded $ M.map (apply rules) $ explodeGrid g
+-- applyOnce rules g = contractExploded $ M.map (apply rules) $ explodeGrid g
+applyOnce rules g = contractExploded $ M.unions $ parMap rpar (M.map (apply rules)) $ M.splitRoot $ explodeGrid g
+
 
 -- find the appropriate rule and apply it to a grid
 apply :: [Rule] -> Grid -> Grid
@@ -125,7 +129,8 @@ subGrid n g bigR bigC = M.fromList [ ((r, c),
 
 -- merge a set of subgrids into one
 contractExploded :: ExplodedGrid -> Grid
-contractExploded gs = foldl1 (>|<) $ map (foldl1 (>-<)) rows
+-- contractExploded gs = foldl1 (>|<) $ map (foldl1 (>-<)) rows
+contractExploded gs = foldl1 (>|<) $ parMap rpar (foldl1 (>-<)) rows
     where rows = explodedRows gs
 
 -- find the rows of an exploded grid
