@@ -219,3 +219,12 @@ executable advent20
                      , text
                      , megaparsec
                      , vector
+
+executable advent21
+  hs-source-dirs:      src/advent21
+  main-is:             advent21.hs
+  default-language:    Haskell2010
+  build-depends:       base >= 4.7 && < 5
+                     , containers
+                     , text
+                     , megaparsec
