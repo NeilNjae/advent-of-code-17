@@ -12,10 +12,8 @@ import Text.Megaparsec hiding (State)
 import qualified Text.Megaparsec.Lexer as L
 import Text.Megaparsec.Text (Parser)
 import qualified Control.Applicative as CA
--- import qualified Data.Functor as F
 
 import qualified Data.Map.Strict as M
-import Data.Map.Strict ((!))
 
 import Data.List 
 
@@ -110,7 +108,7 @@ explodeGrid :: Grid -> ExplodedGrid
 explodeGrid g = if (rm + 1) `rem` 2 == 0 
                 then explodeGrid' 2 g
                 else explodeGrid' 3 g
-    where (rm, cm) = bounds g
+    where (rm, _cm) = bounds g
 
 explodeGrid' :: Int -> Grid -> ExplodedGrid
 explodeGrid' n g = M.fromList [((bigR, bigC), subGrid n g bigR bigC) | bigR <- [0..bigRm], bigC <- [0..bigCm]]
@@ -171,8 +169,6 @@ onlySpace = (char ' ') <|> (char '\t')
 
 sc :: Parser ()
 sc = L.space (skipSome onlySpace) CA.empty CA.empty
-
-lexeme  = L.lexeme sc
 
 symbol = L.symbol sc
 rowSep = symbol "/"
