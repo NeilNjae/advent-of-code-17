@@ -238,3 +238,24 @@ executable advent21parallel
                      , text
                      , megaparsec
                      , parallel
+
+executable advent22a
+  hs-source-dirs:      src/advent22
+  main-is:             advent22a.hs
+  default-language:    Haskell2010
+  build-depends:       base >= 4.7 && < 5
+                     , containers
+
+executable advent22b
+  hs-source-dirs:      src/advent22
+  main-is:             advent22b.hs
+  default-language:    Haskell2010
+  build-depends:       base >= 4.7 && < 5
+                     , containers
+
+executable advent22bh
+  hs-source-dirs:      src/advent22
+  main-is:             advent22bh.hs
+  default-language:    Haskell2010
+  build-depends:       base >= 4.7 && < 5
+                     , unordered-containers
