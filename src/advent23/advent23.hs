@@ -60,12 +60,12 @@ part1 instructions =
              emptyMachine
 
 
-
 -- Part 2 following results of analysis by Dario Petrillo
 -- https://github.com/dp1/AoC17/blob/master/day23.5.txt
 part2 = length $ filter (not . P.isPrime) [start, start + 17 .. end]
     where start = 84 * 100 + 100000
           end = start + 17000
+
 
 executeInstructions = 
     do  instrs <- ask
