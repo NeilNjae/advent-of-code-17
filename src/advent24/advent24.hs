@@ -70,7 +70,7 @@ extendOneBridge parts bridge =
 grow :: Bridge -> Part -> Bridge
 grow bridge part = bridge {bridgeParts = bp', requiring = req'}
     where req = requiring bridge
-          req' = B.findMin $ B.delete req part
+          req' = B.findMin $ B.delete req part -- can get away with `findMin` as I know there are only two elements in a `Part`
           bp' = B.insert part $ bridgeParts bridge
 
 candidates :: Parts -> Bridge -> Candidates
@@ -104,11 +104,11 @@ integer = lexeme L.integer
 symbol = L.symbol sc
 slash = symbol "/"
 
-partsP = partP `sepBy` newline
+partsP = B.fromList <$> partP `sepBy` newline
 partP = B.fromList <$> integer `sepBy` slash
 
 successfulParse :: Text -> Parts
 successfulParse input = 
         case parse partsP "input" input of
-                Left  _error -> B.empty -- TIO.putStr $ T.pack $ parseErrorPretty err
-                Right partsList -> B.fromList partsList
+                Left  _error -> B.empty
+                Right partsList -> partsList
