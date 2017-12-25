@@ -48,17 +48,19 @@ main :: IO ()
 main = do 
         text <- TIO.readFile "data/advent25.txt"
         let (machine0, rules) = successfulParse text
-        let (result, machinef) = part1 rules machine0
+        let machinef = part1 rules machine0
         print $ M.size $ M.filter id $ tape machinef
 
 
+part1 :: Rules -> Machine -> Machine
 part1 rules machine0 = 
-    runState (
+    execState (
         runReaderT executeSteps
                    rules 
              ) 
              machine0
 
+executeSteps :: ProgrammedMachine
 executeSteps = 
     do m <- get
        unless (stepsRemaining m == 0) $
@@ -66,6 +68,7 @@ executeSteps =
                executeSteps
 
 
+executeStep :: ProgrammedMachine
 executeStep = 
     do rules <- ask
        m <- get
