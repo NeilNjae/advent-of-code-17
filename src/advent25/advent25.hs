@@ -90,39 +90,41 @@ lexeme = L.lexeme sc
 integer = lexeme L.integer
 symbol = L.symbol sc
 fullstop = symbol "."
-
-commandP = between (symbol "-") fullstop
-
-writeValueP = (symbol "1" *> pure True) <|> (symbol "0" *> pure False)
-writeP = commandP ((symbol "Write the value") *> writeValueP)
-
-directionP = (symbol "left" *> pure -1) <|> (symbol "right" *> pure 1)
-tapeMovementP = commandP ((symbol "Move one slot to the") *> directionP)
-
-newStateP = commandP ((symbol "Continue with state") *> (some letterChar))
-
-stateTransitionP = stify <$> writeP <*> tapeMovementP <*> newStateP
-    where stify w t s = StateTransition {writeValue = w, newState = s, tapeMovement = t}
-    
-currentValueP = (symbol "If the current value is") *> writeValueP <* (symbol ":")
-    
-stateWhenP = (,) <$> currentValueP <*> stateTransitionP
-    
-stateDefP = (symbol "In state") *> (some letterChar) <* (symbol ":")
-    
-stateRulesP = rulify <$> stateDefP <*> (stateWhenP `sepBy` space)
-    where rulify s ts = M.fromList $ map (\(v, t) -> ((s, v), t)) ts
-   
-manyStateRulesP = M.unions <$> (stateRulesP `sepBy` space)
-
-startStateP = (symbol "Begin in state") *> (some letterChar) <* fullstop
-stepsP =  (symbol "Perform a diagnostic checksum after") *> integer <* (symbol "steps") <* fullstop
+colon = symbol ":"
+dash = symbol "-"
 
 machineDescriptionP = machineify <$> startStateP <*> stepsP <*> manyStateRulesP
     where machineify initial limit rules = 
             ( emptyMachine { tState = initial, stepsRemaining = limit }
             , rules
             )
+
+startStateP = (symbol "Begin in state") *> stateP <* fullstop
+stepsP =  (symbol "Perform a diagnostic checksum after") *> integer <* (symbol "steps") <* fullstop
+            
+manyStateRulesP = M.unions <$> (stateRulesP `sepBy` space)
+
+stateRulesP = rulify <$> stateDefP <*> (stateWhenP `sepBy` space)
+    where rulify s ts = M.fromList $ map (\(v, t) -> ((s, v), t)) ts
+
+stateWhenP = (,) <$> currentValueP <*> stateTransitionP
+    
+stateDefP = (symbol "In state") *> stateP <* colon
+currentValueP = (symbol "If the current value is") *> writeValueP <* colon
+
+stateTransitionP = stify <$> writeP <*> tapeMovementP <*> newStateP
+    where stify w t s = StateTransition {writeValue = w, newState = s, tapeMovement = t}
+
+commandP = between dash fullstop
+
+writeP = commandP ((symbol "Write the value") *> writeValueP)
+tapeMovementP = commandP ((symbol "Move one slot to the") *> directionP)
+newStateP = commandP ((symbol "Continue with state") *> stateP)
+
+stateP = some letterChar
+directionP = (symbol "left" *> pure -1) <|> (symbol "right" *> pure 1)
+writeValueP = (symbol "1" *> pure True) <|> (symbol "0" *> pure False)
+
 
 successfulParse :: Text -> (Machine, Rules)
 successfulParse input = 
