@@ -1,0 +1,29 @@
+At Infi we do not like repetitive work and so we are trying to automate some time-consuming tasks this year. For the distribution of the Christmas gifts we have therefore built delivery robots, so that we can fully focus on code committing and visiting Christmas drinks.
+
+Unfortunately, we are only on release 0.9, because we found out that sometimes several robots can end up in the same place and that is of course not efficient. We have to solve this quickly by determining how often this situation occurs, because it is almost the 25th! Do you help?
+
+To assist with debugging, we have made some logs available. These are stored in the following format:
+
+[sx1, sy1] [sx2, sy2] (x1, y1) (x2, y2) (x1, y1)
+First you will find the start positions of the robots between the hooks. Note: scalability is important, so the number of robots is variable! The log then contains the movements performed by the robots in the same order as the robots are defined.
+
+Example:
+
+[0,0] [1,1] (1,0) (0, -1) (0,1) (- 1,0) (- 1,0) (0,1) (0, -1) ( 1.0)
+Robot 1 starts at 0.0 and Robot 2 starts at 1.1
+Robot 1 goes to 1.0 (0.0 + 1.0)
+Robot 2 goes to 1.0 (1.1 + 0, -1)
+Two robots in the same place. That is not good.
+Robot 1 goes to 1.1 (1.0 + 0.1)
+Robot 2 goes to 0.0 (1.0 + -1.0)
+Robot 1 goes to 0.1 (1.1 + -1.0)
+Robot 2 goes to 0.1 (0,0 + 0,1)
+Another two robots in the same place.
+Robot 1 goes to 0.0 (0.1 + 0, -1)
+Robot 2 goes to 1.1 (0.1 + 1.0)
+Can you calculate how often all robots at the same location for the next log file?
+
+
+
+This is very strange: during the cutting through of the logs we discovered a strange pattern in the movements of the robots. It seems that the robots are smarter than we thought and that they made a pattern during their work that we had not noticed before. This could be the AI we've been looking for: can you find the secret message?
+

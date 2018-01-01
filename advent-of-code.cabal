@@ -291,3 +291,11 @@ executable advent25
                      , mtl
                      , text
                      , megaparsec
+
+executable infi
+  hs-source-dirs:      src/infi
+  main-is:             infi.hs
+  default-language:    Haskell2010
+  build-depends:       base >= 4.7 && < 5
+                     , text
+                     , megaparsec

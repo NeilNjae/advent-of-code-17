@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="favicon" content="./favicon.ico">
+
+    <title>Infi.nl - Advent of Code</title>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-12357372-4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-12357372-4');
+    </script>
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        html,
+        body,
+        .wrapper {
+            height: 100%;
+        }
+
+        .wrapper {
+            display: none;
+            overflow-y: auto;
+            padding: 0 50px;
+            background-image: url(wallpaper.png);
+            background-color: rgba(15, 15, 35, 0.7);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: multiply;
+        }
+
+        .wrapper.show {
+            display: block;
+        }
+
+        h1,
+        p,
+        li,
+        a,
+        input,
+        label,
+        pre,
+        textarea {
+            font-family: Consolas, 'Courier New', "Lucida Console", Courier, Monaco, monospace, sans-serif;
+        }
+
+        p,
+        a,
+        pre,
+        input,
+        textarea {
+            font-size: 16px;
+        }
+
+        h1,
+        p,
+        li,
+        label {
+            color: #fefefe;
+        }
+
+        a {
+            color: #ff6e00;
+        }
+
+        h1 {
+            font-size: 21px;
+        }
+
+        pre {
+            color: #1a1a1a;
+            font-weight: 600;
+            display: inline-block;
+            margin: 0;
+            padding: 10px;
+            background-color: rgba(212, 212, 212, 0.8);
+            border-radius: 10px;
+        }
+
+        textarea {
+            padding: 20px;
+        }
+
+        img {
+            width: 300px;
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        form#solutionFormA,
+        form#solutionFormB,
+        form#resultForm {
+            display: flex;
+        }
+
+        form#resultForm {
+            flex-flow: column nowrap;
+            max-width: 600px;
+        }
+
+        form#resultForm > div {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        form#resultForm input {
+            flex: 1;
+        }
+
+        form#resultForm label {
+            flex: 0 0 200px;
+            align-self: center;
+        }
+
+        label {
+            color: #ff6e00;
+        }
+
+        input {
+            border: 0;
+            padding: 10px 20px;
+        }
+
+        input[type="submit"] {
+            border-radius: 0;
+            background: #ff6e00;
+        }
+
+        .footer {
+            margin-top: 20px;
+            max-width: 600px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        @media(min-width: 500px) {
+            h1 {
+                font-size: 28px;
+            }
+
+            p,
+            a,
+            li,
+            input {
+                font-size: 21px;
+            }
+
+            ul,
+            ol {
+                padding-left: 60px;
+            }
+        }
+
+        @media(max-width: 700px) {
+            .wrapper {
+                padding: 0 20px;
+            }
+
+            .footer {
+                flex-flow: column nowrap;
+            }
+
+            li {
+                font-size: 14px;
+            }
+
+            pre {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="partOne" class="wrapper">
+        <a href="https://infi.nl">
+            <img src="logo.png" alt="Het logo van Infi">
+        </a>
+
+        <h1>Welkom bij de Advent of Code puzzel van Infi!</h1>
+
+        <p>
+            Robots will eat your job!
+        </p>
+        <p>
+            Bij Infi houden wij niet van repetitief werk en dus proberen we dit jaar wat tijdrovende taken te automatiseren. Voor het uitdelen van de kerstcadeaus hebben wij daarom bezorgrobots gebouwd, zodat wij ons volledig kunnen richten op code committen en kerstborrels bezoeken.
+        </p>
+        <p>
+            Helaas zitten we pas op release 0.9, want we kwamen er achter dat soms meerdere robots op dezelfde plek uit kunnen komen en dat is natuurlijk niet efficiënt. We moeten dit snel oplossen door te bepalen hoe vaak deze situatie voorkomt, want het is al bijna de 25ste! Help jij mee?
+        </p>
+        <p>
+            Om te helpen met debuggen hebben we enkele logs beschikbaar gemaakt. Deze zijn in het volgende formaat opgeslagen:
+        </p>
+        <pre>[sx1,sy1][sx2,sy2](x1,y1)(x2,y2)(x1,y1)</pre>
+        <p>
+            Eerst vind je tussen de blokhaken de startposities van de robots. Let op: schaalbaarheid is belangrijk, dus het aantal robots is variabel! Vervolgens bevat het log de bewegingen die door de robots uitgevoerd zijn, in dezelfde volgorde als dat de robots zijn gedefinieerd.
+        </p>
+
+        <p>Voorbeeld:</p>
+        <pre>[0,0][1,1](1,0)(0,-1)(0,1)(-1,0)(-1,0)(0,1)(0,-1)(1,0)</pre>
+        <ol>
+            <li>Robot 1 begint op 0,0 en Robot 2 begint op 1,1</li>
+            <li>Robot 1 gaat naar 1,0 (0,0 + 1,0)</li>
+            <li>Robot 2 gaat naar 1,0 (1,1 + 0,-1)</li>
+            <li>Twee robots op dezelfde plek. Dat is niet goed.</li>
+            <li>Robot 1 gaat naar 1,1 (1,0 + 0,1)</li>
+            <li>Robot 2 gaat naar 0,0 (1,0 + -1,0)</li>
+            <li>Robot 1 gaat naar 0,1 (1,1 + -1,0)</li>
+            <li>Robot 2 gaat naar 0,1 (0,0 + 0,1)</li>
+            <li>Weer twee robots op dezelfde plek.</li>
+            <li>Robot 1 gaat naar 0,0 (0,1 + 0,-1)</li>
+            <li>Robot 2 gaat naar 1,1 (0,1 + 1,0)</li>
+        </ol>
+
+        <p>
+            Kun jij uitrekenen hoe vaak alle robots tegelijk op dezelfde plek uitkomen voor het volgende logbestand?
+        </p>
+
+        <a id="uidLink" target="_blank">Klik hier om de log te bekijken</a>
+
+        <form id="solutionFormA">
+            <input type="number" name="inputSolutionA" id="inputSolutionA">
+            <input type="submit" value="Stuur je antwoord op">
+        </form>
+
+        <div class="footer">
+            <a href="http://werkenbij.infi.nl">Kom bij ons werken!</a>
+            <a href="http://infi.nl">Bezoek onze coole website</a>
+        </div>
+    </div>
+
+    <div id="partTwo" class="wrapper">
+        <a href="https://infi.nl">
+            <img src="logo.png" alt="Het logo van Infi">
+        </a>
+
+        <h1>Breaking news: we zien een patroon!</h1>
+
+        <p>
+            Dit is heel gek: tijdens het doorspitten van de logs ontdekten we een vreemd patroon in de bewegingen van de robots. Het lijkt erop dat de robots slimmer zijn dan we dachten en dat ze tijdens hun werkzaamheden een patroon hebben gemaakt dat ons niet eerder was opgevallen. This could be the AI we’ve been looking for: kun jij het geheime bericht vinden?
+        </p>
+
+        <a id="uidLink" target="_blank">Klik hier om de log te bekijken</a>
+
+        <form id="solutionFormB">
+            <input type="number" name="inputSolutionB" id="inputSolutionB">
+            <input type="submit" value="Stuur je antwoord op">
+        </form>
+
+        <div class="footer">
+            <a href="http://werkenbij.infi.nl">Kom bij ons werken!</a>
+            <a href="http://infi.nl">Bezoek onze coole website</a>
+        </div>
+    </div>
+
+    <div id="result" class="wrapper">
+        <a href="https://infi.nl">
+            <img src="logo.png" alt="Het logo van Infi">
+        </a>
+
+        <h1>Eureka!</h1>
+
+        <p>
+            Met jouw hulp hebben we onze robots kunnen optimaliseren! Als je het onderstaande formulier invult en je bij de eerste 5 zit, dan belonen wij jou met een cool t-shirt!
+        </p>
+
+        <a href="https://goo.gl/forms/dBnQx5pD5iQMLm9D2">Klik hier om ons jouw oplossing te sturen</a>
+
+        <div class="footer">
+            <a href="http://werkenbij.infi.nl">Kom bij ons werken!</a>
+            <a href="http://infi.nl">Bezoek onze coole website</a>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="script.js"></script>
+
+    <!--
+
+    powered by
+                                        ///////////   /////
+                                        ////////////.  //////
+                                        /////            //*
+                                        /////
+    /////     *///////////////,      /////////////////////
+    /////    ///////////////////     /////////////////////
+    /////   //////         //////    /////           /////
+    /////   /////           /////    /////           /////
+    /////   /////           /////    /////           /////
+    /////   /////           /////    /////           /////
+    /////   /////           /////    /////           /////
+    /////   /////           /////    /////           /////
+    ///     ///             ///      ///             ///
+
+    https://infi.nl
+
+    -->
+
+</body>
+</html>
