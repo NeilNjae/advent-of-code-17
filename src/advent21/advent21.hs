@@ -68,15 +68,16 @@ transposeG g = M.fromList [((c, r) , M.findWithDefault False (r, c) g) | r <- [0
 
 -- Find all the arrangments of a grid, including reflection and rotation.
 allArrangements :: Grid -> [Grid]
-allArrangements grid = map (\f -> f grid) [ id
-                                          , reflectH
-                                          , reflectV
-                                          , transposeG
-                                          , reflectH . transposeG
-                                          , reflectV . transposeG
-                                          , reflectH . reflectV . transposeG
-                                          , reflectV . reflectH
-                                          ]
+-- allArrangements grid = map (\f -> f grid) [ id
+allArrangements grid = map ($ grid) [ id
+                                    , reflectH
+                                    , reflectV
+                                    , transposeG
+                                    , reflectH . transposeG
+                                    , reflectV . transposeG
+                                    , reflectH . reflectV . transposeG
+                                    , reflectV . reflectH
+                                    ]
 
 
 
